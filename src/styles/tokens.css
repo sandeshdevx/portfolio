@@ -1,0 +1,44 @@
+:root {
+  /* Colour */
+  --bg: #0a0b09;
+  --bg-soft: #0e100c;
+  --bg-panel: #11130f;
+  --ink: #f1efe6;
+  --ink-soft: #c7c5bb;
+  --muted: #8e8d83;
+  --muted-strong: #a6a49a;
+  --line: rgba(241, 239, 230, 0.12);
+  --line-strong: rgba(241, 239, 230, 0.26);
+  --lime: #c9f45a;
+  --lime-strong: #d7ff71;
+  --lime-ink: #0a0b09;
+  --lime-soft: rgba(201, 244, 90, 0.12);
+  --blue: #7f9fff;
+  --blue-soft: rgba(127, 159, 255, 0.13);
+
+  /* Type */
+  --font-display: 'Big Shoulders Display Variable', 'Arial Narrow', sans-serif;
+  --font-sans: 'Instrument Sans Variable', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono Variable', 'SFMono-Regular', Consolas, monospace;
+
+  /* Layout */
+  --container: 1440px;
+  --gutter: clamp(1.25rem, 4.5vw, 4.5rem);
+  --section-y: clamp(6.5rem, 12vw, 11rem);
+  --header-h: 5.25rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --dur-fast: 220ms;
+  --dur-med: 480ms;
+  --dur-slow: 900ms;
+
+  /* Z-index */
+  --z-base: 1;
+  --z-canvas: 2;
+  --z-header: 100;
+  --z-menu: 90;
+  --z-skip: 1000;
+}

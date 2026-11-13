@@ -1,0 +1,37 @@
+---
+import { ArrowDown, ArrowRight, ArrowUpRight } from '@lucide/astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'ghost' | 'text';
+  arrow?: 'up-right' | 'down' | 'right' | 'none';
+  external?: boolean;
+  download?: boolean | string;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'ghost',
+  arrow = 'up-right',
+  external = false,
+  download,
+  class: className,
+  ariaLabel,
+} = Astro.props;
+
+const Icon = arrow === 'down' ? ArrowDown : arrow === 'right' ? ArrowRight : ArrowUpRight;
+---
+
+<a
+  class:list={['btn', `btn--${variant}`, className]}
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  download={download}
+  aria-label={ariaLabel}
+>
+  <span class="btn__label"><slot /></span>
+  {arrow !== 'none' && <Icon class="btn__icon" size={15} stroke-width={1.5} aria-hidden="true" />}
+</a>

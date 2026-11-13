@@ -1,0 +1,548 @@
+---
+import { ArrowLeft, ArrowRight, ArrowUpRight } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { portfolio } from '../../data/portfolio';
+import type { Project } from '../../data/portfolio';
+
+export function getStaticPaths() {
+  return portfolio.projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const currentIndex = portfolio.projects.findIndex((entry) => entry.id === project.id);
+const nextProject = portfolio.projects[(currentIndex + 1) % portfolio.projects.length];
+const nextHref = `/work/${nextProject.id}`;
+---
+
+<BaseLayout
+  title={`${project.name} — Case study | ${portfolio.identity.name}`}
+  description={project.summary}
+  bodyClass="page-case"
+>
+  <article class:list={['case-study', `case-study--${project.id}`]}>
+    <header class="case-study__hero shell">
+      <a class="case-study__back" href="/#projects">
+        <ArrowLeft size={15} stroke-width={1.5} aria-hidden="true" />
+        Selected projects
+      </a>
+
+      <div class="case-study__heading">
+        <p class="case-study__category">{project.category}</p>
+        <h1>{project.name}</h1>
+        <p class="case-study__tagline">{project.tagline}</p>
+      </div>
+
+      <div class="case-study__meta">
+        <p>{project.summary}</p>
+        <dl>
+          <div>
+            <dt>Stack</dt>
+            <dd>{project.stack.join(' / ')}</dd>
+          </div>
+          <div>
+            <dt>Links</dt>
+            <dd>
+              {
+                project.links.length > 0 ? (
+                  project.links.map((link) => (
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                      {link.label}
+                      <ArrowUpRight size={14} stroke-width={1.5} aria-hidden="true" />
+                    </a>
+                  ))
+                ) : (
+                  'No public link'
+                )
+              }
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    {
+      project.image ? (
+        <figure class="case-study__visual shell">
+          <div class="case-study__screens">
+            <img
+              class="case-study__desktop"
+              src={project.image.src}
+              alt={project.image.alt}
+              width="1440"
+              height="1000"
+              loading="eager"
+              decoding="async"
+            />
+            {project.image.mobileSrc && (
+              <img
+                class="case-study__mobile"
+                src={project.image.mobileSrc}
+                alt={project.image.mobileAlt ?? ''}
+                width="430"
+                height="932"
+                loading="eager"
+                decoding="async"
+              />
+            )}
+          </div>
+          <figcaption>{project.image.caption}</figcaption>
+        </figure>
+      ) : (
+        <aside class="case-study__record shell" aria-label="Interface availability">
+          <p class="case-study__record-label">Interface capture</p>
+          <p class="case-study__record-title">Not published.</p>
+          <p>{project.evidenceNote}</p>
+        </aside>
+      )
+    }
+
+    <div class="case-study__body shell">
+      <aside class="case-study__rail" aria-labelledby="case-facts-title">
+        <p class="case-study__rail-label" id="case-facts-title">Project record</p>
+        <dl>
+          <div>
+            <dt>Type</dt>
+            <dd>{project.category.split('/')[0].trim()}</dd>
+          </div>
+          <div>
+            <dt>Stack</dt>
+            <dd>{project.stack.join(', ')}</dd>
+          </div>
+          <div>
+            <dt>Source</dt>
+            <dd>
+              {
+                project.links.find((link) => link.kind === 'github') ? (
+                  <a
+                    href={project.links.find((link) => link.kind === 'github')?.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Public repository
+                    <ArrowUpRight size={14} stroke-width={1.5} aria-hidden="true" />
+                  </a>
+                ) : (
+                  'Not published'
+                )
+              }
+            </dd>
+          </div>
+        </dl>
+      </aside>
+
+      <div class="case-study__narrative">
+        <section aria-labelledby="case-problem">
+          <h2 id="case-problem">The problem</h2>
+          <p>{project.problem}</p>
+        </section>
+
+        <section aria-labelledby="case-approach">
+          <h2 id="case-approach">How it works</h2>
+          <p>{project.approach}</p>
+        </section>
+
+        <section aria-labelledby="case-outcome">
+          <h2 id="case-outcome">What exists</h2>
+          <p>{project.outcome}</p>
+          <ul class="case-study__highlights">
+            {
+              project.highlights.map((highlight) => (
+                <li>{highlight}</li>
+              ))
+            }
+          </ul>
+        </section>
+
+        {
+          project.boundary && (
+            <p class="case-study__note">{project.boundary}</p>
+          )
+        }
+      </div>
+    </div>
+
+    <nav class="case-study__next" aria-label="Next project">
+      <a href={nextHref}>
+        <span>
+          <span class="case-study__next-label">Next project</span>
+          {nextProject.name}
+        </span>
+        <ArrowRight size={22} stroke-width={1.3} aria-hidden="true" />
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .case-study {
+    padding-top: calc(var(--header-h) + clamp(2.5rem, 6vw, 5rem));
+    overflow: clip;
+  }
+
+  .case-study__hero {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .case-study__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color var(--dur-fast) ease;
+  }
+
+  .case-study__back:hover {
+    color: var(--lime);
+  }
+
+  .case-study__heading {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .case-study__category {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lime);
+  }
+
+  .case-study__heading h1 {
+    max-width: 12ch;
+    font-size: clamp(4.2rem, 11vw, 11rem);
+    line-height: 0.8;
+  }
+
+  .case-study__tagline {
+    max-width: 28ch;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+
+  .case-study__meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.8fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .case-study__meta > p {
+    max-width: 54ch;
+    color: var(--muted-strong);
+    font-size: 0.96rem;
+    line-height: 1.7;
+  }
+
+  .case-study__meta dl,
+  .case-study__rail dl {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .case-study__meta dl > div,
+  .case-study__rail dl > div {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .case-study__meta dt,
+  .case-study__rail dt {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .case-study__meta dd,
+  .case-study__rail dd {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+
+  .case-study__meta dd a,
+  .case-study__rail dd a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--lime);
+  }
+
+  .case-study__visual {
+    margin-top: clamp(3rem, 7vw, 6rem);
+  }
+
+  .case-study__screens {
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  .case-study__desktop {
+    width: min(84%, 72rem);
+    height: auto;
+    box-shadow: 0 2rem 7rem rgba(0, 0, 0, 0.32);
+  }
+
+  .case-study__mobile {
+    width: min(16%, 12rem);
+    height: auto;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.32);
+  }
+
+  .case-study__visual figcaption {
+    margin-top: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .case-study__record {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: clamp(3rem, 7vw, 6rem);
+    padding: clamp(2rem, 5vw, 4rem);
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .case-study__record-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(10, 11, 9, 0.55);
+  }
+
+  .case-study__record-title {
+    font-family: var(--font-sans);
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .case-study__record > p:last-child {
+    max-width: 59ch;
+    color: rgba(10, 11, 9, 0.68);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .case-study__body {
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.36fr) minmax(0, 1fr);
+    gap: clamp(2rem, 8vw, 8rem);
+    margin-top: clamp(4.5rem, 9vw, 8rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .case-study__rail {
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+
+  .case-study__rail-label {
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lime);
+  }
+
+  .case-study__rail dl > div {
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+
+  .case-study__narrative {
+    display: grid;
+    gap: clamp(3rem, 6vw, 5rem);
+    max-width: 68ch;
+  }
+
+  .case-study__narrative h2 {
+    margin-bottom: 1.1rem;
+    font-family: var(--font-sans);
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    text-transform: none;
+  }
+
+  .case-study__narrative p {
+    color: var(--muted-strong);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .case-study__highlights {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 2rem;
+    margin-top: 1.7rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .case-study__highlights li {
+    position: relative;
+    padding-left: 1rem;
+    color: var(--ink-soft);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .case-study__highlights li::before {
+    content: '';
+    position: absolute;
+    top: 0.55em;
+    left: 0;
+    width: 0.28rem;
+    height: 0.28rem;
+    background: var(--lime);
+  }
+
+  .case-study__note {
+    padding: 1.2rem 1.4rem;
+    border-left: 2px solid var(--blue);
+    background: var(--bg-soft);
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+
+  .case-study__next {
+    margin-top: clamp(4rem, 8vw, 7rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .case-study__next a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(2rem, 5vw, 4rem) max(var(--gutter), calc((100vw - var(--container)) / 2));
+    background: var(--lime);
+    color: var(--lime-ink);
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 5vw, 4.5rem);
+    font-weight: 600;
+    line-height: 0.9;
+    text-transform: uppercase;
+    transition: background-color var(--dur-med) var(--ease-out);
+  }
+
+  .case-study__next a:hover {
+    background: var(--ink);
+  }
+
+  .case-study__next a > span {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .case-study__next-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .case-study__next svg {
+    flex: none;
+    transition: transform var(--dur-med) var(--ease-out);
+  }
+
+  .case-study__next a:hover svg {
+    transform: translateX(6px);
+  }
+
+  .case-study--smart-health-tracker .case-study__heading h1 {
+    font-family: var(--font-sans);
+    font-size: clamp(3.2rem, 7.5vw, 7.5rem);
+    font-weight: 520;
+    line-height: 0.92;
+    letter-spacing: -0.06em;
+    text-transform: none;
+  }
+
+  .case-study--curionest .case-study__heading h1 {
+    max-width: 8ch;
+  }
+
+  @media (max-width: 900px) {
+    .case-study__meta,
+    .case-study__body {
+      grid-template-columns: 1fr;
+    }
+
+    .case-study__rail {
+      position: static;
+    }
+
+    .case-study__screens {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .case-study__desktop,
+    .case-study__mobile {
+      width: 100%;
+    }
+
+    .case-study__mobile {
+      max-width: 14rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .case-study__heading h1,
+    .case-study--curionest .case-study__heading h1 {
+      font-size: clamp(3.6rem, 16vw, 5.8rem);
+    }
+
+    .case-study--smart-health-tracker .case-study__heading h1 {
+      font-size: clamp(2.9rem, 12vw, 4.4rem);
+    }
+
+    .case-study__highlights {
+      grid-template-columns: 1fr;
+    }
+
+    .case-study__next a {
+      font-size: clamp(2rem, 10vw, 3.2rem);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .case-study__mobile {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,316 @@
+---
+import { ArrowUp } from '@lucide/astro';
+import {
+  getYear,
+  hasEmail,
+  hasResume,
+  mailtoHref,
+  portfolio,
+  resumeHref,
+} from '../../data/portfolio';
+import SocialLinks from '../ui/SocialLinks.astro';
+
+const { identity, navigation } = portfolio;
+const year = getYear();
+---
+
+<footer class="site-footer">
+  <div class="site-footer__grid shell">
+    <div class="site-footer__identity">
+      <a class="footer-mark" href="/#home" aria-label={`${identity.name} — back to home`}>
+        <span class="footer-mark__letter" aria-hidden="true">{identity.monogram}</span>
+        <span class="footer-mark__orbit" aria-hidden="true"></span>
+      </a>
+      <p class="site-footer__tagline">
+        Building thoughtful software at the intersection of web engineering and applied AI.
+      </p>
+      <p class="mono-label site-footer__role">{identity.role}</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer navigation">
+      <p class="mono-label">Navigate</p>
+      <ul>
+        {
+          navigation.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-footer__connect">
+      <p class="mono-label">Elsewhere</p>
+      <SocialLinks variant="stack" />
+      {
+        hasEmail && (
+          <a class="site-footer__contact-link" href={mailtoHref}>
+            {portfolio.contact.email}
+          </a>
+        )
+      }
+      {
+        hasResume && (
+          <a class="site-footer__contact-link" href={resumeHref} download>
+            Download résumé
+          </a>
+        )
+      }
+      <p class="mono-label site-footer__availability">
+        <span class="status-dot" aria-hidden="true"></span>
+        {identity.availability}
+      </p>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom shell">
+    <p>© {year} {identity.name}. All rights reserved.</p>
+    <p class="mono-label site-footer__build">Astro / Three.js / GSAP</p>
+    <button class="back-to-top" type="button" data-back-to-top>
+      <span>Back to top</span>
+      <ArrowUp size={14} stroke-width={1.5} aria-hidden="true" />
+    </button>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    z-index: 1;
+    padding-top: clamp(4rem, 8vw, 6rem);
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+  }
+
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(201, 244, 90, 0.025), transparent 45%),
+      radial-gradient(circle at 90% 0%, rgba(127, 159, 255, 0.04), transparent 34%);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.65fr) minmax(0, 0.75fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .site-footer__identity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 4.2rem;
+    height: 4.2rem;
+    margin-bottom: 1.6rem;
+    border: 1px solid var(--line-strong);
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .footer-mark:hover {
+    border-color: var(--lime);
+  }
+
+  .footer-mark__letter {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    transform: translateY(-0.04em);
+  }
+
+  .footer-mark__orbit {
+    position: absolute;
+    width: 4.6rem;
+    height: 1.85rem;
+    border: 1px solid var(--lime);
+    border-radius: 50%;
+    opacity: 0.55;
+    transform: rotate(-24deg);
+  }
+
+  .site-footer__tagline {
+    max-width: 27ch;
+    font-family: var(--font-serif);
+    font-size: clamp(1.35rem, 2.1vw, 1.8rem);
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .site-footer__role {
+    margin-top: 1.4rem;
+    color: var(--muted);
+  }
+
+  .site-footer__nav {
+    display: grid;
+    align-content: start;
+    gap: 1.1rem;
+  }
+
+  .site-footer__nav ul {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .site-footer__nav a {
+    position: relative;
+    width: fit-content;
+    font-size: 0.92rem;
+    color: var(--muted-strong);
+    transition: color var(--dur-fast) ease;
+  }
+
+  .site-footer__nav a::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -0.12rem;
+    left: 0;
+    height: 1px;
+    background: var(--lime);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-med) var(--ease-out);
+  }
+
+  .site-footer__nav a:hover {
+    color: var(--ink);
+  }
+
+  .site-footer__nav a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .site-footer__connect {
+    display: grid;
+    align-content: start;
+    gap: 1.1rem;
+  }
+
+  .site-footer__contact-link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    transition: color var(--dur-fast) ease;
+  }
+
+  .site-footer__contact-link:hover {
+    color: var(--lime);
+  }
+
+  .site-footer__availability {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    max-width: 25ch;
+    margin-top: 0.5rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .site-footer__availability .status-dot {
+    margin-top: 0.5rem;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.35rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .site-footer__build {
+    color: var(--muted);
+  }
+
+  .back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    transition: color var(--dur-fast) ease;
+  }
+
+  .back-to-top:hover {
+    color: var(--lime);
+  }
+
+  .back-to-top svg {
+    transition: transform var(--dur-med) var(--ease-out);
+  }
+
+  .back-to-top:hover svg {
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 900px) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 1fr;
+    }
+
+    .site-footer__connect {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .site-footer__nav {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+      gap: 2.8rem;
+    }
+
+    .site-footer__nav,
+    .site-footer__connect {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    .site-footer__bottom {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 0.7rem 1.5rem;
+    }
+
+    .site-footer__build {
+      display: none;
+    }
+
+    .back-to-top {
+      margin-left: auto;
+    }
+  }
+</style>

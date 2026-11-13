@@ -1,0 +1,108 @@
+---
+import ProjectCard from '../ui/ProjectCard.astro';
+import { portfolio } from '../../data/portfolio';
+---
+
+<section class="projects" id="projects" data-section aria-labelledby="projects-title">
+  <div class="projects__inner shell">
+    <header class="projects__header" data-reveal>
+      <h2 class="projects__title" id="projects-title">Selected projects</h2>
+      <div class="projects__intro">
+        <p>
+          Three systems built around real problems: AI-assisted crisis support, habit recovery,
+          and personal health tracking.
+        </p>
+        <p class="projects__evidence-note">
+          Screenshots show actual interfaces from local builds. Missing evidence is labeled rather
+          than filled in.
+        </p>
+      </div>
+    </header>
+
+    <div class="projects__list">
+      {
+        portfolio.projects.map((project) => (
+          <ProjectCard project={project} />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects {
+    position: relative;
+    padding-block: clamp(4.5rem, 8vw, 7rem);
+    overflow: clip;
+  }
+
+  .projects::before {
+    content: '';
+    position: absolute;
+    top: 8rem;
+    right: -12rem;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(127, 159, 255, 0.065), transparent 66%);
+    pointer-events: none;
+  }
+
+  .projects__header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(20rem, 1.3fr);
+    gap: clamp(1.5rem, 6vw, 6rem);
+    align-items: end;
+  }
+
+  .projects__title {
+    max-width: 10ch;
+    font-family: var(--font-sans);
+    font-size: clamp(2.4rem, 4.2vw, 3.9rem);
+    font-weight: 480;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    text-transform: none;
+  }
+
+  .projects__intro {
+    max-width: 52ch;
+    justify-self: end;
+  }
+
+  .projects__intro > p:first-child {
+    color: var(--ink-soft);
+    font-size: clamp(0.98rem, 1.2vw, 1.08rem);
+    line-height: 1.65;
+  }
+
+  .projects__evidence-note {
+    margin-top: 0.9rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.61rem;
+    line-height: 1.6;
+    letter-spacing: 0.04em;
+  }
+
+  .projects__list {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .projects__list > :global(.project:first-child) {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  @media (max-width: 800px) {
+    .projects__header {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 1.5rem;
+    }
+
+    .projects__intro {
+      justify-self: start;
+    }
+  }
+</style>

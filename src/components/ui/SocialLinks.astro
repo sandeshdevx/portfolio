@@ -1,0 +1,81 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import { portfolio } from '../../data/portfolio';
+import BrandGlyph from './BrandGlyph.astro';
+
+interface Props {
+  variant?: 'inline' | 'stack';
+  class?: string;
+}
+
+const { variant = 'inline', class: className } = Astro.props;
+const { socialLinks } = portfolio;
+---
+
+{
+  socialLinks.length > 0 && (
+    <ul class:list={['social-links', `social-links--${variant}`, className]}>
+      {socialLinks.map((link) => (
+        <li>
+          <a
+            class="social-links__link"
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${link.label} — opens in a new tab`}
+          >
+            <BrandGlyph platform={link.platform} size={16} />
+            <span>{link.display}</span>
+            <ArrowUpRight class="social-links__arrow" size={14} stroke-width={1.4} aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+  }
+
+  .social-links__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: color var(--dur-fast) ease;
+  }
+
+  .social-links__link:hover {
+    color: var(--lime);
+  }
+
+  .social-links__arrow {
+    color: var(--muted);
+    transition:
+      transform var(--dur-med) var(--ease-out),
+      color var(--dur-fast) ease;
+  }
+
+  .social-links__link:hover .social-links__arrow {
+    color: var(--lime);
+    transform: translate(2px, -2px);
+  }
+
+  .social-links--stack {
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .social-links--stack .social-links__link {
+    font-size: 0.72rem;
+  }
+</style>

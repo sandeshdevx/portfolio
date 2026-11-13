@@ -1,0 +1,28 @@
+{
+  "name": "Sandesh — Developer Portfolio",
+  "short_name": "Sandesh",
+  "description": "Portfolio of Sandesh, a Computer Science student and developer building thoughtful full-stack web applications and applied-AI systems.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0b09",
+  "theme_color": "#0a0b09",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

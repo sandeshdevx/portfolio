@@ -1,0 +1,112 @@
+---
+import '@fontsource-variable/big-shoulders-display/wght';
+import '@fontsource-variable/instrument-sans/wght';
+import '@fontsource/instrument-serif/latin-400.css';
+import '@fontsource/instrument-serif/latin-400-italic.css';
+import '@fontsource-variable/jetbrains-mono/wght';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/animations.css';
+
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import { portfolio } from '../data/portfolio';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  bodyClass?: string;
+}
+
+const {
+  title = portfolio.seo.title,
+  description = portfolio.seo.description,
+  image = portfolio.seo.ogImage,
+  noindex = false,
+  bodyClass = '',
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://example.com');
+const canonical = new URL(Astro.url.pathname, site);
+const ogImage = new URL(image, site).href;
+const { identity, seo, skillGroups, socialLinks } = portfolio;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: identity.name,
+  jobTitle: 'Computer Science Student',
+  description,
+  url: new URL('/', site).href,
+  affiliation: {
+    '@type': 'CollegeOrUniversity',
+    name: identity.college,
+  },
+  knowsAbout: [...new Set(skillGroups.flatMap((group) => group.items))],
+  hasCredential: portfolio.certifications.map((certification) => ({
+    '@type': 'EducationalOccupationalCredential',
+    name: certification.name,
+  })),
+  ...(socialLinks.length > 0 ? { sameAs: socialLinks.map((link) => link.href) } : {}),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={seo.themeColor} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="author" content={identity.name} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+    <link rel="canonical" href={canonical.href} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={seo.siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sandesh — Computer Science student and developer" />
+    <meta property="og:locale" content={seo.locale} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="Sandesh — Computer Science student and developer" />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')}
+    />
+
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <Navbar />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

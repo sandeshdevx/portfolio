@@ -1,0 +1,311 @@
+---
+import '@fontsource-variable/big-shoulders-display/wght';
+import '@fontsource-variable/instrument-sans/wght';
+import '@fontsource/instrument-serif/latin-400-italic.css';
+import '@fontsource-variable/jetbrains-mono/wght';
+import '../styles/tokens.css';
+import { portfolio } from '../data/portfolio';
+
+const { identity } = portfolio;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1200" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Sandesh — Open Graph image</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      h1,
+      p {
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        overflow: hidden;
+        background: #0a0b09;
+      }
+
+      body {
+        color: var(--ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .og {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 82% 46%, rgba(201, 244, 90, 0.09), transparent 34%),
+          var(--bg);
+      }
+
+      .og::before {
+        content: '';
+        position: absolute;
+        inset: 28px;
+        border: 1px solid rgba(241, 239, 230, 0.12);
+        pointer-events: none;
+      }
+
+      .og__grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(241, 239, 230, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(241, 239, 230, 0.04) 1px, transparent 1px);
+        background-size: 100% 88px, 25% 100%;
+        mask-image: linear-gradient(180deg, #000, transparent 92%);
+      }
+
+      .og__top {
+        position: absolute;
+        top: 52px;
+        z-index: 3;
+        right: 58px;
+        left: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .og__brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--font-display);
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .og__mark {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid rgba(241, 239, 230, 0.3);
+        font-size: 24px;
+      }
+
+      .og__mark::after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--lime);
+      }
+
+      .og__meta {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .og__body {
+        position: absolute;
+        top: 140px;
+        z-index: 2;
+        left: 58px;
+        max-width: 810px;
+      }
+
+      .og__eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .og__eyebrow::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        background: var(--lime);
+      }
+
+      .og__title {
+        display: flex;
+        align-items: flex-end;
+        margin-top: 8px;
+        font-family: var(--font-display);
+        font-size: 256px;
+        font-weight: 720;
+        line-height: 0.8;
+        letter-spacing: -0.012em;
+      }
+
+      .og__dot {
+        width: 22px;
+        height: 22px;
+        margin-bottom: 30px;
+        margin-left: 12px;
+        background: var(--lime);
+      }
+
+      .og__line {
+        max-width: 620px;
+        margin-top: 20px;
+        font-size: 24px;
+        line-height: 1.35;
+        color: var(--ink-soft);
+      }
+
+      .og__line em {
+        font-family: var(--font-serif);
+        font-size: 1.12em;
+        color: var(--ink);
+      }
+
+      .og__bottom {
+        position: absolute;
+        z-index: 3;
+        right: 58px;
+        bottom: 52px;
+        left: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 18px;
+        border-top: 1px solid rgba(241, 239, 230, 0.14);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .og__bottom span:nth-child(2) {
+        color: var(--lime);
+      }
+
+      .og__art {
+        position: absolute;
+        z-index: 1;
+        top: 52px;
+        right: -28px;
+        width: 470px;
+        height: 470px;
+      }
+
+      .og__ring {
+        position: absolute;
+        border-radius: 50%;
+      }
+
+      .og__ring--a {
+        inset: 6%;
+        border: 1px solid rgba(201, 244, 90, 0.45);
+        transform: rotate(-22deg) scaleY(0.4);
+      }
+
+      .og__ring--b {
+        inset: 1%;
+        border: 1px dashed rgba(241, 239, 230, 0.2);
+        transform: rotate(28deg) scaleY(0.55);
+      }
+
+      .og__ring--c {
+        inset: 16%;
+        border: 1px solid rgba(127, 159, 255, 0.36);
+        transform: rotate(72deg) scaleY(0.6);
+      }
+
+      .og__core {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120px;
+        height: 120px;
+        border: 1px solid rgba(201, 244, 90, 0.4);
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 32%, #efffc4, #a5cb36 20%, #38451d 52%, #0b0d08 80%);
+        box-shadow: 0 0 90px rgba(201, 244, 90, 0.15);
+        transform: translate(-50%, -50%);
+      }
+
+      .og__sat {
+        position: absolute;
+        top: 18%;
+        left: 16%;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--lime);
+      }
+
+      .og__sat--b {
+        top: auto;
+        right: 20%;
+        bottom: 24%;
+        left: auto;
+        width: 6px;
+        height: 6px;
+        background: var(--blue);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="og">
+      <div class="og__grid"></div>
+
+      <header class="og__top">
+        <div class="og__brand">
+          <span class="og__mark" aria-hidden="true">{identity.monogram}</span>
+          <span>{identity.name}</span>
+        </div>
+        <p class="og__meta" style="margin: 0">Portfolio / 2026</p>
+      </header>
+
+      <div class="og__body">
+        <p class="og__eyebrow">Computer Science Student &amp; Developer</p>
+        <h1 class="og__title">
+          {identity.name.toUpperCase()}
+          <span class="og__dot" aria-hidden="true"></span>
+        </h1>
+        <p class="og__line">
+          Building <em>full-stack products</em> and applied-AI tools with clarity and privacy in mind.
+        </p>
+      </div>
+
+      <div class="og__art" aria-hidden="true">
+        <span class="og__ring og__ring--a"></span>
+        <span class="og__ring og__ring--b"></span>
+        <span class="og__ring og__ring--c"></span>
+        <span class="og__core"></span>
+        <span class="og__sat"></span>
+        <span class="og__sat og__sat--b"></span>
+      </div>
+
+      <footer class="og__bottom">
+        <span>B.E. Computer Science &amp; Engineering</span>
+        <span>Full-stack web · Applied AI</span>
+        <span>Open to early-career roles</span>
+      </footer>
+    </main>
+  </body>
+</html>

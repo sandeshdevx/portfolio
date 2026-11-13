@@ -1,0 +1,110 @@
+@keyframes status-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 244, 90, 0.32);
+  }
+  60% {
+    box-shadow: 0 0 0 0.45rem rgba(201, 244, 90, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 244, 90, 0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.1rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes orbit-drift {
+  0%,
+  100% {
+    transform: rotate(var(--tilt, 0deg)) scaleY(var(--squash, 0.42));
+  }
+  50% {
+    transform: rotate(calc(var(--tilt, 0deg) + 9deg)) scaleY(var(--squash, 0.42));
+  }
+}
+
+@keyframes core-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.035);
+  }
+}
+
+@keyframes marquee-drift {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes scroll-pulse {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+  }
+  35% {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 1;
+  }
+  70% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
