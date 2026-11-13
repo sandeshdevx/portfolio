@@ -12,6 +12,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 *.log
+# Academic submissions — keep local
+docs/AAT-1-REPORT.md
 
 # Cloudflare
 .wrangler/
